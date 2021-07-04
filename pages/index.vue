@@ -2,7 +2,7 @@
   <div class="container">
     <div>
       <Logo />
-      <h1 class="title">github.zal1000.io</h1>
+      <h1 class="title">{{ title }}</h1>
       <div class="links">
         <a
           href="https://nuxtjs.org/"
@@ -27,8 +27,50 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import firebase from 'firebase'
+import 'firebase/firestore'
 
-export default Vue.extend({})
+try {
+  firebase.initializeApp({
+    apiKey: 'AIzaSyBmRS5Yy-1ktWXNsYjk9mQ8Rs9RhmQy600',
+    authDomain: 'zal1000.firebaseapp.com',
+    databaseURL: 'https://zal1000.firebaseio.com',
+    projectId: 'zal1000',
+    storageBucket: 'zal1000.appspot.com',
+    messagingSenderId: '512279358183',
+    appId: '1:512279358183:web:749d4c93b6f1bccb541042',
+    measurementId: 'G-5YG80J6YWM',
+  })
+} catch (error) {}
+
+const db = firebase.firestore()
+
+export default Vue.extend({
+  data() {
+    return {
+      title: 'Loading...',
+      desc: 'Loading...',
+    }
+  },
+  head() {
+    return {
+      title: this.title,
+      meta: [
+        {
+          hid: 'description',
+          name: 'og:description',
+          content: this.desc,
+        },
+      ],
+    }
+  },
+  async created() {
+    const ref = db.collection('test').doc('test')
+    const doc = await ref.get()
+    this.title = doc.data()?.title ? doc.data()?.title : 'Error'
+    this.desc = doc.data()?.desc ? doc.data()?.desc : 'Error'
+  },
+})
 </script>
 
 <style>
