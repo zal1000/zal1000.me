@@ -46,6 +46,14 @@ try {
 const db = firebase.firestore()
 
 export default Vue.extend({
+  async asyncData() {
+    const ref = db.collection('test').doc('test')
+    const doc = await ref.get()
+    return {
+      title: doc.data()?.title ? doc.data()?.title : 'Error',
+      desc: doc.data()?.desc ? doc.data()?.desc : 'Error',
+    }
+  },
   data() {
     return {
       title: 'Loading...',
@@ -63,12 +71,6 @@ export default Vue.extend({
         },
       ],
     }
-  },
-  async created() {
-    const ref = db.collection('test').doc('test')
-    const doc = await ref.get()
-    this.title = doc.data()?.title ? doc.data()?.title : 'Error'
-    this.desc = doc.data()?.desc ? doc.data()?.desc : 'Error'
   },
 })
 </script>
