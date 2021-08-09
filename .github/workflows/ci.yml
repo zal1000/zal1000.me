@@ -30,7 +30,7 @@ jobs:
           check-latest: true
 
       - name: Cache node_modules 📦
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -38,10 +38,8 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies 👨🏻‍💻
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit
 
-      - name: Run linter 👀
-        run: npm run lint
 
       - name: Run tests 🧪
         run: npm run test
